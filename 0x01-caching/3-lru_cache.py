@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""implemtnets the LIFOCache class"""
+"""implerments the LRUCache algorithm"""
 from base_caching import BaseCaching
 
 
-class LIFOCache(BaseCaching):
+class LRUCache(BaseCaching):
     """inherits from base caching and is a caching system"""
     def __init__(self):
         """initialize the fifocache instances"""
@@ -18,10 +18,15 @@ class LIFOCache(BaseCaching):
             self.cache_data.pop(key)
         self.cache_data.update({key: item})
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
-            key = list(self.cache_data.keys())[-2]
+            key = list(self.cache_data.keys())[0]
             self.cache_data.pop(key)
             print("DISCARD:", key)
 
     def get(self, key):
         """return the value in self.cache_data linked to the key"""
-        return self.cache_data.get(key)
+        val = self.cache_data.get(key)
+        if val is None:
+            return
+        self.cache_data.pop(key)
+        self.cache_data.update({key: val})
+        return self.cache_data.get(key, None)
